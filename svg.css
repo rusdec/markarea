@@ -1,0 +1,42 @@
+.green, .red {
+	stroke: black;
+	opacity: 0.5;
+}
+
+.green {
+	fill: MediumSeaGreen;
+}
+
+.red {
+	fill: PaleVioletRed;
+}
+
+#buttonSave {
+	cursor: pointer;
+	margin: 10px;
+	width: 100px;
+	height: 15px;
+	font-size: 10pt;
+	background: black;
+	color: white;
+	text-align: center;
+}
+
+#buttonSave:hover {
+	background: darkgray;
+}
+
+#work_area {
+	position: relative;
+	padding: 0px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	border: 1px solid red;
+}
+
+#remote {
+	position: relative;
+	top: 10px;
+	border: 1px solid #000;
+}
