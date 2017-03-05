@@ -140,7 +140,6 @@ class Path {
 		circle.setAttribute('r', this.params.pathHostRadius);
 		circle.setAttribute('class', 'tooltip');
 		circle.setAttribute('title','x');
-		circle.setValue(
 		$(this.parentE).append(circle);
 	};
 	
