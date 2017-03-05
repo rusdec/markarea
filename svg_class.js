@@ -26,7 +26,7 @@ function dump(arr,level) {
 
 class Path {
 	
-	constructor() {
+	constructor(p) {
 		this.params = {
 			pathActiveID: 'active_path',
 			pathStatus: {
@@ -38,11 +38,12 @@ class Path {
 					name: 'busy',
 					color: 'red',
 				}		
-			}
+			},
+			pathHostRadius: 3
 		};
-		
 		var e; //Элемент <path>
 		var d = []; //Свойство <path d="">
+		this.parentE = p;
 		
 	};
 	
@@ -80,14 +81,13 @@ class Path {
 	}
 	
 	removeIfEmpty() {
-		console.log(this.getPoints().length);
-		if (this.getPoints().length < 2)
+		console.log("Длина: ", this.getPoints().length);
+		if (this.getPoints().length <= 2)
 			$(this.e).remove();
 	};
 
 	newPoint(points, offset) {
-		//Регулировка x,y в зависимости
-		//от смещения изображения
+		//Регулировка x,y в зависимости от смещения изображения
 		var point = {
 			x: points[0] - offset.top,
 			y: points[1] - offset.left
@@ -95,6 +95,7 @@ class Path {
 		points = this.getPoints();
 		points.push(point);
 		this.drawPath(points)
+		this.createHost(point);
 	};
 
 	getPoints() {
@@ -111,36 +112,47 @@ class Path {
 		return points;
 	};
 
-	usePath(e) {
+	useThisPath(e) {
 		this.e = e;
+		this.setActiveID(this.e);
+		this.d = this.getPoints();
 	};
 
 	drawPath(p) {
-		console.log(dump(p));
 		var d = '';
 		$.each(p, function(i,point) {
-			console.log("each: ",point.x, point.y);
 			d += ''+point.x+' '+point.y+' ';
 		});	
-		console.log("d: ", d);
 		$(this.e).attr('d', 'M'+d+'Z');
 	};
 
-	createPath(parentE, imgE) {
+	createHosts(p) {
+		$.each(p, function(i, point) {
+			this.createHost(point);
+		});
+	};
+	
+	createHost(point) {
+		console.log('x: ', point.x, ' | y: ', point.y);
+		var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+		circle.setAttribute('cx', point.x);
+		circle.setAttribute('cy', point.y);
+		circle.setAttribute('r', this.params.pathHostRadius);
+		circle.setAttribute('class', 'tooltip');
+		circle.setAttribute('title','x');
+		circle.setValue(
+		$(this.parentE).append(circle);
+	};
+	
+	createPath() {
 		this.removeActiveID();
 		this.e = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 		this.e.setAttribute('id', this.params.pathActiveID);
 		this.e.setAttribute('d', 'MZ');
-		$(parentE).append(this.e);
+		$(this.parentE).append(this.e);
 		this.e = this.findActivePath();
 		this.setActiveID(this.e);
 		this.setStatusFree(this.e);
 	};		
 
-	getThisPath(e) {
-		this.e = e;
-		this.setActiveID(this.e);
-	}
-
-	
 }

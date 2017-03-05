@@ -3,13 +3,13 @@ $(document).ready(function() {
 	clearCheckbox();	
 	createSVG($('#work_img'));
 	var path;
+	$('.tooltip').tooltipster();
 
 	$('#new_area').click(function() {
 		if ($(this).prop('checked')) {
-			path = new Path();
-			path.createPath($('svg'));
+			path = new Path($('svg'));
+			path.createPath();
 		} else {
-			console.log('unchecked');
 			path.removeIfEmpty();
 		}
 		
@@ -22,10 +22,9 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', 'path', function() {
-		if ($('#edit').prop('checked')) {
-			path = new Path;
-			path.usePath(this);
-			console.log("status: ",path.getStatus());
+		if ( ($('#edit').prop('checked')) && (! $('#new_area').prop('checked')) ) {
+			path = new Path($('svg'));
+			path.useThisPath(this);
 			switch(path.getStatus()) {
 				case 'free':
 					path.setStatusBusy();
@@ -53,5 +52,4 @@ function createSVG(e) {
 	e.remove(); 
 	$('#work_area').append(svg);
 	$('svg').css('background', 'url("'+src+'")');
-	console.log($('svg').offset());
 }
