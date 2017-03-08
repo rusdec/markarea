@@ -3,6 +3,9 @@ $(document).ready(function() {
 	clearCheckbox();	
 	createSVG($('#work_img'));
 	var path;
+	var down = false;
+	var circle;
+
 	$('.tooltip').tooltipster();
 
 	$('#new_area').click(function() {
@@ -18,6 +21,29 @@ $(document).ready(function() {
 	$('svg').click(function(e) {
 		if ($('#new_area').prop('checked')) {
 			path.newPoint([e.pageX, e.pageY], $('svg').offset());
+		}
+	});
+
+	$(document).on('mousedown', 'circle', function(e) {
+		if ( ($('#edit').prop('checked')) && (! $('#new_area').prop('checked')) ) {
+			path = new Path($('svg'));
+			path.useThisPath($('#'+$(this).attr('path_id')));
+			circle = $(this);
+			down = true;
+		}
+	});
+	
+	$(document).on('mousemove', function(e) {
+		if (down) {	
+			path.newPointCoordinate(circle, [e.pageX, e.pageY], $('svg').offset(), $(circle).attr('count'));
+			console.log(path.getPathID()+': ['+e.pageX+','+e.pageY+']');
+		}
+	});
+
+	$(document).on('mouseup', function() {
+		if (down) {
+			down = false;
+			circle = '';
 		}
 	});
 

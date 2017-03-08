@@ -28,7 +28,7 @@ class Path {
 	
 	constructor(p) {
 		this.params = {
-			pathActiveID: 'active_path',
+			pathActiveValue: 'active_path',
 			pathStatus: {
 				free: {
 					name: 'free',
@@ -39,7 +39,21 @@ class Path {
 					color: 'red',
 				}		
 			},
-			pathHostRadius: 3
+			circle: {
+				radius: '3',
+				stroke: 'white',
+				strokeWidth: '1',
+				fill: 'black',
+			},
+		};
+		this.g = {
+			name: '',
+			id: '',
+			circles: [{}],
+			path: {
+				name: '',
+				d: ''
+			}	
 		};
 		var e; //Элемент <path>
 		var d = []; //Свойство <path d="">
@@ -47,18 +61,17 @@ class Path {
 		
 	};
 	
-	setActiveID(e) {
-		var p = this.params;
-		$(e).attr('id', p.pathActiveID);
+	setActiveValue(e) {
+		$(e).attr('value', this.params.pathActiveValue);
 	};
 	
-	removeActiveID() {
+	removeActiveValue() {
 		var e = this.findActivePath();
-		$(e).removeAttr('id')
+		$(e).removeAttr('value')
 	};
 
 	findActivePath() {
-		return $('#'+this.params.pathActiveID);
+		return $('[value='+this.params.pathActiveValue+']');
 	}
 
 	setStatusBusy() {
@@ -68,16 +81,20 @@ class Path {
 	setStatusFree() {
 		this.setStatus('free')
 	}
+	
+	getPathID() {
+		return $(this.e).attr('id');
+	}
 
 	setStatus(s) {
 		var p = this.params;
 		$(this.e).removeAttr('class');
 		$(this.e).addClass(p.pathStatus[s].color);
-		$(this.e).attr('text', p.pathStatus[s].name);
+		$(this.e).attr('status', p.pathStatus[s].name);
 	};
 
 	getStatus() {
-		return $(this.e).attr("text");
+		return $(this.e).attr("status");
 	}
 	
 	removeIfEmpty() {
@@ -96,11 +113,34 @@ class Path {
 		points.push(point);
 		this.drawPath(points)
 		this.createHost(point);
+		console.log(dump(this.getPoints()));
 	};
+	
+	newPointCoordinate(circle, points, offset, i) {
+		console.log('newPC: '+circle+' | '+points+' | '+offset+' | '+i);
+		var point = {
+			x: points[0] - offset.top,
+			y: points[1] - offset.left
+		}
+		$(circle).attr('cx', point.x);
+		$(circle).attr('cy', point.y);
+		points = this.getPoints();	
+		
+		points[i].x = point.x;
+		points[i].y = point.y;
+		this.drawPath(points);
+	}
+
+	getPointsCount() {
+		var p = this.getPoints();
+		return p.length-1;
+	}
 
 	getPoints() {
 		var points = [];
+		console.log($(this.e).attributes);
 		var p = $(this.e).attr('d');
+		console.log(p);
 		p = p.replace(/(M|Z)/g, '').split(' ');
 		for (var i = 0; i < p.length-1; i+=2) {
 			points.push({
@@ -114,9 +154,13 @@ class Path {
 
 	useThisPath(e) {
 		this.e = e;
-		this.setActiveID(this.e);
+		this.setActiveValue(this.e);
 		this.d = this.getPoints();
 	};
+
+	getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
 
 	drawPath(p) {
 		var d = '';
@@ -137,20 +181,26 @@ class Path {
 		var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		circle.setAttribute('cx', point.x);
 		circle.setAttribute('cy', point.y);
-		circle.setAttribute('r', this.params.pathHostRadius);
+		circle.setAttribute('r',		this.params.circle.radius);
+		circle.setAttribute('stroke',	this.params.circle.stroke);
+		circle.setAttribute('stroke-width',	this.params.circle.strokeWidth);
+		circle.setAttribute('fill',		this.params.circle.fill);
 		circle.setAttribute('class', 'tooltip');
 		circle.setAttribute('title','x');
+		circle.setAttribute('path_id', this.getPathID());
+		circle.setAttribute('count', this.getPointsCount());
 		$(this.parentE).append(circle);
 	};
 	
 	createPath() {
-		this.removeActiveID();
+		this.removeActiveValue();
 		this.e = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		this.e.setAttribute('id', this.params.pathActiveID);
+		this.e.setAttribute('value', this.params.pathActiveValue);
 		this.e.setAttribute('d', 'MZ');
+		this.e.setAttribute('id', this.getRandomInt(10,10000));
 		$(this.parentE).append(this.e);
 		this.e = this.findActivePath();
-		this.setActiveID(this.e);
+		this.setActiveValue(this.e);
 		this.setStatusFree(this.e);
 	};		
 
