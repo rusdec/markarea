@@ -1,4 +1,4 @@
-.green, .red {
+.green, .red, .skyblue, .orange {
 	stroke: black;
 	opacity: 0.5;
 }
@@ -9,6 +9,14 @@
 
 .red {
 	fill: PaleVioletRed;
+}
+
+.skyblue {
+	fill: SkyBlue;
+}
+
+.orange {
+	fill: SandyBrown;
 }
 
 circle:hover {
@@ -28,6 +36,10 @@ circle:hover {
 
 #buttonSave:hover {
 	background: darkgray;
+}
+
+.active_path {
+	opacity: 0.8;
 }
 
 #work_area {

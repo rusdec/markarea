@@ -66,18 +66,38 @@ $(document).ready(function() {
 		console.log('down(mu): '+down);
 	});
 
+	$(document).on('click', '#edit', function() {
+		if ($('#edit').prop('checked')) {
+			var d = document.createElement('div');
+			d.setAttribute('id', 'area_properties');
+			$(d).insertAfter('#work_area');
+			var statuses = new Path($('svg'));
+			statuses = statuses.getAllStatuses()[0];
+			$.each(statuses, function(k,s) {
+				var color = document.createElement('div');
+				color.setAttribute('title',s.description);
+				color.setAttribute('status',s.name);
+				$(d).append(color)
+				$(color).css('background-color', s.color);
+				$(color).addClass('color_brick');
+				$(color).append('<span>'+s.description+'</span>');
+			});
+
+		} else {
+			$('#area_properties').remove();
+			path.removeActiveValue();
+		}
+	});
+	$(document).on('click', '.color_brick', function() {
+		if (path != undefined) {
+			path.setStatus($(this).attr('status'));
+		}
+	});
+
 	$(document).on('click', 'path', function() {
 		if ( ($('#edit').prop('checked')) && (! $('#new_area').prop('checked')) ) {
 			path = new Path($('svg'));
 			path.useThisPath(this);
-			switch(path.getStatus()) {
-				case 'free':
-					path.setStatusBusy();
-					break;
-				case 'busy':
-					path.setStatusFree();
-					break;
-			}
 		}
 	});
 });

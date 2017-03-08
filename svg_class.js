@@ -33,11 +33,23 @@ class Path {
 				free: {
 					name: 'free',
 					color: 'green',
+					description: 'Свободно',
 				},
 				busy: {
 					name: 'busy',
 					color: 'red',
-				}		
+					description: 'Занято',
+				},
+				booked: {
+					name: 'booked',
+					color: 'orange',
+					description: 'Забронировано',
+				},
+				renovation: {
+					name: 'renovation',
+					color: 'skyblue',
+					description: 'Ремонт'
+				},
 			},
 			circle: {
 				radius: '3',
@@ -62,12 +74,24 @@ class Path {
 	};
 	
 	setActiveValue(e) {
-		$(e).attr('value', this.params.pathActiveValue);
+		var actVal = this.params.pathActiveValue;
+		$.each($('path[value="'+actVal+'"'), function() {
+			$(this).removeAttr('value');
+			$(this).removeClass(actVal);
+		});
+		$(e).attr('value', actVal);
+		if ($(e).attr('class') != undefined) {
+			var c = $(e).attr('class');
+		} else {
+			var c = '';
+		}
+		$(e).addClass(c+' '+actVal);
 	};
 	
 	removeActiveValue() {
 		var e = this.findActivePath();
 		$(e).removeAttr('value')
+		$(e).removeClass(this.params.pathActiveValue);
 	};
 
 	findActivePath() {
@@ -88,13 +112,23 @@ class Path {
 
 	setStatus(s) {
 		var p = this.params;
+		if ($(this.e).attr('class') != undefined) {
+			var c = $(this.e).attr('class');
+		} else {
+			var c = '';
+		}
 		$(this.e).removeAttr('class');
-		$(this.e).addClass(p.pathStatus[s].color);
+		$(this.e).addClass(c+' '+p.pathStatus[s].color);
+		console.log(c+' '+p.pathStatus[s].color);
 		$(this.e).attr('status', p.pathStatus[s].name);
 	};
 
 	getStatus() {
 		return $(this.e).attr("status");
+	}
+
+	getAllStatuses() {
+		return $(this.params.pathStatus);
 	}
 	
 	removeIfEmpty() {
@@ -207,7 +241,7 @@ class Path {
 		this.e.setAttribute('id', this.getRandomInt(10,10000));
 		$(this.parentE).append(this.e);
 		this.e = this.findActivePath();
-		this.setActiveValue(this.e);
+		//this.setActiveValue(this.e);
 		this.setStatusFree(this.e);
 	};		
 

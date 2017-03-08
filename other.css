@@ -1,0 +1,23 @@
+.color_brick {
+	border-radius: 2px;
+	height: 20px;
+	margin: auto;
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 5px;
+	padding: 3px;
+	text-align: center;
+	color: white;
+	font-style: Arial;
+}
+.color_brick:hover {
+	opacity: 0.6;
+}
+
+#area_properties {
+	position: relative;
+	padding: 5px;
+	margin-top: 10px;
+	border: 1px solid black;
+}
+	
