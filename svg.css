@@ -11,6 +11,10 @@
 	fill: PaleVioletRed;
 }
 
+circle:hover {
+	cursor: pointer;
+}
+
 #buttonSave {
 	cursor: pointer;
 	margin: 10px;

@@ -6,7 +6,6 @@ $(document).ready(function() {
 	var down = false;
 	var circle;
 
-	$('.tooltip').tooltipster();
 
 	$('#new_area').click(function() {
 		if ($(this).prop('checked')) {
@@ -22,6 +21,15 @@ $(document).ready(function() {
 		if ($('#new_area').prop('checked')) {
 			path.newPoint([e.pageX, e.pageY], $('svg').offset());
 		}
+	});
+	
+	$(document).on('mouseover', 'circle', function(e) {
+		if (! down) {
+			$(this).attr('r', '5')
+		}
+	});
+	$(document).on('mouseleave', 'circle', function(e) {
+		$(this).attr('r', '3')
 	});
 
 	$(document).on('mousedown', 'circle', function(e) {

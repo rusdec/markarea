@@ -113,6 +113,10 @@ class Path {
 		points.push(point);
 		this.drawPath(points)
 		this.createHost(point);
+		$('.tooltip').tooltipster({
+			theme: 'tooltipster-noir',
+			interactive: true,
+		});
 		console.log(dump(this.getPoints()));
 	};
 	
