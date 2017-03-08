@@ -98,8 +98,12 @@ class Path {
 	}
 	
 	removeIfEmpty() {
-		if (this.getPoints().length <= 2)
+		if (this.getPoints().length <= 2) {
 			$(this.e).remove();
+			$.each($('circle[path_id="'+$(this.e).attr('id')+'"]'), function(c) {
+				$(this).remove();
+			});
+		}
 	};
 
 	newPoint(points, offset) {

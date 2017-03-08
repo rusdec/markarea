@@ -17,14 +17,14 @@ $(document).ready(function() {
 		}
 		
 	});
-
+	/*
 	$(document).on('mouseover', '.tooltip', function() {
 		$(this).tooltipster({
 			theme: 'tooltipster-noir',
 			interactive: true,
 		});
 	});
-
+	*/
 	$('svg').click(function(e) {
 		if ($('#new_area').prop('checked') && (!overCircleNow)) {
 			path.newPoint([e.pageX, e.pageY], $('svg').offset());
