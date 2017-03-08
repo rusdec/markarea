@@ -98,7 +98,6 @@ class Path {
 	}
 	
 	removeIfEmpty() {
-		console.log("Длина: ", this.getPoints().length);
 		if (this.getPoints().length <= 2)
 			$(this.e).remove();
 	};
@@ -113,15 +112,15 @@ class Path {
 		points.push(point);
 		this.drawPath(points)
 		this.createHost(point);
+		/*
 		$('.tooltip').tooltipster({
 			theme: 'tooltipster-noir',
 			interactive: true,
 		});
-		console.log(dump(this.getPoints()));
+		*/
 	};
 	
 	newPointCoordinate(circle, points, offset, i) {
-		console.log('newPC: '+circle+' | '+points+' | '+offset+' | '+i);
 		var point = {
 			x: points[0] - offset.top,
 			y: points[1] - offset.left
@@ -142,9 +141,7 @@ class Path {
 
 	getPoints() {
 		var points = [];
-		console.log($(this.e).attributes);
 		var p = $(this.e).attr('d');
-		console.log(p);
 		p = p.replace(/(M|Z)/g, '').split(' ');
 		for (var i = 0; i < p.length-1; i+=2) {
 			points.push({
@@ -181,7 +178,6 @@ class Path {
 	};
 	
 	createHost(point) {
-		console.log('x: ', point.x, ' | y: ', point.y);
 		var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 		circle.setAttribute('cx', point.x);
 		circle.setAttribute('cy', point.y);
@@ -189,6 +185,9 @@ class Path {
 		circle.setAttribute('stroke',	this.params.circle.stroke);
 		circle.setAttribute('stroke-width',	this.params.circle.strokeWidth);
 		circle.setAttribute('fill',		this.params.circle.fill);
+		$.each($('circle[path_id="'+this.getPathID()+'"]'), function() {
+			$(this).removeClass('tooltip tooltipstered');
+		});
 		circle.setAttribute('class', 'tooltip');
 		circle.setAttribute('title','x');
 		circle.setAttribute('path_id', this.getPathID());
