@@ -112,7 +112,12 @@ class Path {
 
 	setStatus(s) {
 		var p = this.params;
-		if ($(this.e).attr('class') != undefined) {
+		var e = this.e;
+		if ($(e).attr('class') != undefined) {
+			$.each(this.params.pathStatus, function() {
+				$(e).removeClass(this.color);
+			});
+			this.e = e;
 			var c = $(this.e).attr('class');
 		} else {
 			var c = '';
